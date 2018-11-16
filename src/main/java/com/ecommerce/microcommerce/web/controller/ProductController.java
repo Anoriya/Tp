@@ -103,6 +103,12 @@ public class ProductController {
         return productDao.chercherUnProduitCher(400);
     }
 
+    @GetMapping(value= "/AdminProduits")
+    public List<Product> calculerMargeProduit(){
+
+        return productDao.calculerMargeProduit();
+    }
+
 
 
 }
