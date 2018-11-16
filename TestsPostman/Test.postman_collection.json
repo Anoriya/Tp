@@ -1,0 +1,58 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Test",
+		"_postman_id": "d62b4b34-7b92-ab16-86e2-153223b979b8",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:9090/Produits",
+			"request": {
+				"url": "http://localhost:9090/Produits",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW46YWRtaW4=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\": 2,\n        \"nom\": \"Le vide\",\n        \"prix\": 0,\n        \"prixAchat\": 200\n    }"
+				},
+				"description": "Test de l'erreur prix égale à 0"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9090/Produits/AdminProduits",
+			"request": {
+				"url": "http://localhost:9090/Produits/AdminProduits",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9090/Produits/TriProduits",
+			"request": {
+				"url": "http://localhost:9090/Produits/TriProduit",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
