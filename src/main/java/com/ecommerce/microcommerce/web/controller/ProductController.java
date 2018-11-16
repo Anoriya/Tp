@@ -2,6 +2,7 @@ package com.ecommerce.microcommerce.web.controller;
 
 import com.ecommerce.microcommerce.dao.ProductDao;
 import com.ecommerce.microcommerce.model.Product;
+import com.ecommerce.microcommerce.web.exceptions.ProduitGratuitException;
 import com.ecommerce.microcommerce.web.exceptions.ProduitIntrouvableException;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -19,7 +20,7 @@ import java.net.URI;
 import java.util.List;
 
 
-@Api( description="API pour es opérations CRUD sur les produits.")
+@Api( description="API pour les opérations CRUD sur les produits.")
 
 @RestController
 public class ProductController {
@@ -74,6 +75,8 @@ public class ProductController {
         if (productAdded == null)
             return ResponseEntity.noContent().build();
 
+        if (productAdded.getPrix() == 0) throw new ProduitGratuitException(("Rien n'est gratuit."));
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -103,17 +106,37 @@ public class ProductController {
         return productDao.chercherUnProduitCher(400);
     }
 
-    @GetMapping(value= "/AdminProduits")
-    public List<Product> calculerMargeProduit(){
+    @GetMapping(value= "/Produits/AdminProduits")
+    public MappingJacksonValue calculerMargeProduit(){
 
-        return productDao.calculerMargeProduit();
+        Iterable<Product> produits = productDao.calculerMargeProduit();
+
+        SimpleBeanPropertyFilter monFiltre = SimpleBeanPropertyFilter.serializeAllExcept("prixAchat");
+
+        FilterProvider listDeNosFiltres = new SimpleFilterProvider().addFilter("monFiltreDynamique", monFiltre);
+
+        MappingJacksonValue produitsFiltres = new MappingJacksonValue(produits);
+
+        produitsFiltres.setFilters(listDeNosFiltres);
+
+        return produitsFiltres;
     }
 
-    @GetMapping(value = "/TriProduit")
-    public List<Product> trierProduitsParOrdreAlphabetique() {
+    @GetMapping(value = "/Produits/TriProduit")
+    public MappingJacksonValue trierProduitsParOrdreAlphabetique() {
 
-        return productDao.findAllByOrderByNomAsc();
+        Iterable<Product> produits =  productDao.findAllByOrderByNomAsc();
 
+
+        SimpleBeanPropertyFilter monFiltre = SimpleBeanPropertyFilter.serializeAllExcept("prixAchat");
+
+        FilterProvider listDeNosFiltres = new SimpleFilterProvider().addFilter("monFiltreDynamique", monFiltre);
+
+        MappingJacksonValue produitsFiltres = new MappingJacksonValue(produits);
+
+        produitsFiltres.setFilters(listDeNosFiltres);
+
+        return produitsFiltres;
     }
 
 
